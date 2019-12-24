@@ -1,37 +1,50 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Loading from './components/layout/Loading';
+
+import SignInState from './context/user/auth/AuthState';
+import AlertState from './context/layout/alert/AlertState';
+
+const SignIn = React.lazy(() => import('./pages/Auth/SignInPage'));
+const SignUp = React.lazy(() => import('./pages/Auth/SignUpPage'));
+const RecoveryPassword = React.lazy(() => import('./pages/Auth/RecoveryPasswordPage'));
+const DefaultLayout = React.lazy(() => import('./containers/DefaultLayout/DefaultLayout'));;
 
 function App() {
   return (
-    <div className="App">
-      <h1 className="title">Bulma</h1>
-      <p className="subtitle">
-        Modern CSS framework based on{' '}
-        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox">
-          Flexbox
-        </a>
-      </p>
-
-      <div className="field">
-        <div className="control">
-          <input className="input" type="text" placeholder="Input" />
-        </div>
-      </div>
-
-      <div className="field">
-        <p className="control">
-          <span className="select">
-            <select>
-              <option>Select dropdown</option>
-            </select>
-          </span>
-        </p>
-      </div>
-
-      <div className="buttons">
-        <a className="button is-primary">Primary</a>
-        <a className="button is-link">Link</a>
-      </div>
-    </div>
+    <SignInState>
+      <AlertState>
+        <Router>
+          <React.Suspense fallback={Loading()}>
+            <Switch>
+              <Route
+                  exact
+                  path="/sign-in"
+                  name="Sign In"
+                  render={props => <SignIn {...props} />}
+                />
+                <Route
+                  exact
+                  path="/register"
+                  name="Sign Up"
+                  render={props => <SignUp {...props} />}
+                />
+                <Route
+                  exact
+                  path="/recovery-password"
+                  name="Recovery Password"
+                  render={props => <RecoveryPassword {...props} />}
+                />
+                <Route
+                  path="/"
+                  name="Home"
+                  render={props => <DefaultLayout {...props} />}
+                />
+            </Switch>
+          </React.Suspense>
+        </Router>
+      </AlertState>
+    </SignInState>
   );
 }
 
