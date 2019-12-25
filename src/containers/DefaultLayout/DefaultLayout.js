@@ -1,7 +1,8 @@
 import React, { Component, Suspense } from 'react'
 import routes from '../../routes';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Switch } from 'react-router-dom';
 import Loading from '../../components/layout/Loading';
+import PrivateRoute from '../../components/routing/PrivateRoute';
 
 class DefaultLayout extends Component {
   render() {
@@ -9,15 +10,15 @@ class DefaultLayout extends Component {
       <>
         <Suspense fallback={Loading()}>
           <Switch>
-            {routes.map((route, idx) => {
-              return route.component ? (
-                <Route
+            {routes.map(({component: Component, path, exact, name}, idx) => {
+              return Component ? (
+                <PrivateRoute
                   key={idx}
-                  path={route.path}
-                  exact={route.exact}
-                  name={route.name}
-                  render={props => <route.component {...props} />}
-                />
+                  path={path}
+                  exact={exact}
+                  name={name}
+                  component={props => <Component {...props} />}
+                  />
               ) : null;
             })}
             <Redirect from="/" to="/sign-in" />

@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 import axios from 'axios';
 import AuthContext from './authContext';
 import AuthReducer from './authReducer';
+import { loadProgressBar } from 'axios-progress-bar';
 import {
   SET_LOADING,
   LOGIN_SUCCESS,
@@ -11,8 +12,8 @@ import {
 
 const AuthState = props => {
   const initialState = {
-    token: localStorage.getItem('token'),
-    isAuthenticated: null,
+    access_token: localStorage.getItem('access_token'),
+    isAuthenticated: localStorage.getItem('access_token') ? true : null,
     loading: false,
     user: null,
     error: null
@@ -30,12 +31,13 @@ const AuthState = props => {
 
     try {
       setLoading();
+      loadProgressBar();
 
       const res = await axios.post(`http://localhost:8080/api/v1/auth/login`, formData, config);
 
       dispatch({
         type: LOGIN_SUCCESS,
-        payload: res.data
+        payload: res.data.data
       });
 
     } catch (error) {
@@ -52,7 +54,7 @@ const AuthState = props => {
 
   return <AuthContext.Provider
     value={{
-      token: state.token,
+      access_token: state.access_token,
       isAuthenticated: state.isAuthenticated,
       loading: state.loading,
       user: state.user,

@@ -7,7 +7,7 @@ import {
 export default (state, action) => {
   switch (action.type) {
     case LOGIN_SUCCESS:
-      localStorage.setItem('token', action.payload.access_token);
+      localStorage.setItem('access_token', action.payload.access_token);
       return {
         ...state,
         ...action.payload,
@@ -15,10 +15,10 @@ export default (state, action) => {
         loading: false
       };
     case LOGIN_FAIL:
-      localStorage.removeItem('token');
+      localStorage.removeItem('access_token');
       return {
         ...state,
-        token: null,
+        access_token: null,
         isAuthenticated: false,
         loading: false,
         user: null,

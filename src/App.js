@@ -2,8 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Loading from './components/layout/Loading';
 
-import SignInState from './context/user/auth/AuthState';
+import AuthState from './context/user/auth/AuthState';
 import AlertState from './context/layout/alert/AlertState';
+import PrivateRoute from './components/routing/PrivateRoute';
 
 const SignIn = React.lazy(() => import('./pages/Auth/SignInPage'));
 const SignUp = React.lazy(() => import('./pages/Auth/SignUpPage'));
@@ -12,39 +13,40 @@ const DefaultLayout = React.lazy(() => import('./containers/DefaultLayout/Defaul
 
 function App() {
   return (
-    <SignInState>
+    <AuthState>
       <AlertState>
         <Router>
           <React.Suspense fallback={Loading()}>
             <Switch>
+              <PrivateRoute
+                path="/"
+                exact
+                name="Home"
+                component={props => <DefaultLayout {...props} />}
+                />
               <Route
-                  exact
-                  path="/sign-in"
-                  name="Sign In"
-                  render={props => <SignIn {...props} />}
+                exact
+                path="/sign-in"
+                name="Sign In"
+                render={props => <SignIn {...props} />}
                 />
-                <Route
-                  exact
-                  path="/register"
-                  name="Sign Up"
-                  render={props => <SignUp {...props} />}
+              <Route
+                exact
+                path="/register"
+                name="Sign Up"
+                render={props => <SignUp {...props} />}
                 />
-                <Route
-                  exact
-                  path="/recovery-password"
-                  name="Recovery Password"
-                  render={props => <RecoveryPassword {...props} />}
-                />
-                <Route
-                  path="/"
-                  name="Home"
-                  render={props => <DefaultLayout {...props} />}
+              <Route
+                exact
+                path="/recovery-password"
+                name="Recovery Password"
+                render={props => <RecoveryPassword {...props} />}
                 />
             </Switch>
           </React.Suspense>
         </Router>
       </AlertState>
-    </SignInState>
+    </AuthState>
   );
 }
 
