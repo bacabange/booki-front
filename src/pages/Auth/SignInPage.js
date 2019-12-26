@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import logo from '../../assets/images/Logo.png';
 import AuthContext from '../../context/user/auth/authContext';
 import AlertContext from '../../context/layout/alert/alertContext';
+import Alert from '../../components/layout/Alert';
 
 const SignInPage = props => {
   const authContext = useContext(AuthContext);
@@ -12,11 +13,16 @@ const SignInPage = props => {
     password: 'secret'
   });
 
+  const { setAlert } = alertContext;
   const { login, error, isAuthenticated } = authContext;
 
   useEffect(() => {
     if (isAuthenticated) {
       props.history.push('/');
+    }
+
+    if (error && error.status === 401) {
+      setAlert("Your credentials are incorrect", 'danger');
     }
     // eslint-disable-next-line
   }, [error, isAuthenticated, props.history]);
@@ -24,6 +30,7 @@ const SignInPage = props => {
   const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
 
   const onSubmit = e => {
+    console.log("TCL: error", error)
     try {
       e.preventDefault();
       login({ email, password });
@@ -51,11 +58,14 @@ const SignInPage = props => {
 
               <h1 className="title">Sing in</h1>
 
+              <Alert />
+
               <div className="field">
                 <label className="label">Email</label>
                 <div className="control">
                   <input
                     className="input"
+                    name="email"
                     type="text"
                     placeholder="example@booki.co"
                     value={email}
@@ -70,6 +80,7 @@ const SignInPage = props => {
                   <input
                     className="input"
                     type="password"
+                    name="password"
                     placeholder="Don't write 123456"
                     value={password}
                     onChange={onChange} />

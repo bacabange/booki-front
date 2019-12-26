@@ -1,7 +1,8 @@
 import {
   SET_LOADING,
   LOGIN_SUCCESS,
-  LOGIN_FAIL
+  LOGIN_FAIL,
+  LOGOUT
 } from '../../types';
 
 export default (state, action) => {
@@ -15,6 +16,7 @@ export default (state, action) => {
         loading: false
       };
     case LOGIN_FAIL:
+    case LOGOUT:
       localStorage.removeItem('access_token');
       return {
         ...state,
