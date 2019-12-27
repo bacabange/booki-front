@@ -32,7 +32,7 @@ function App() {
                 />
               <Route
                 exact
-                path="/register"
+                path="/sing-up"
                 name="Sign Up"
                 render={props => <SignUp {...props} />}
                 />

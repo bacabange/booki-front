@@ -2,13 +2,19 @@ import {
   SET_LOADING,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  LOGOUT
+  LOGOUT,
+  LOAD_USER
 } from '../../types';
 
 export default (state, action) => {
   switch (action.type) {
     case LOGIN_SUCCESS:
+
       localStorage.setItem('access_token', action.payload.access_token);
+      localStorage.setItem('user', JSON.stringify({
+        ...action.payload.user
+      }));
+
       return {
         ...state,
         ...action.payload,
@@ -18,6 +24,8 @@ export default (state, action) => {
     case LOGIN_FAIL:
     case LOGOUT:
       localStorage.removeItem('access_token');
+      localStorage.removeItem('user');
+
       return {
         ...state,
         access_token: null,
@@ -30,6 +38,11 @@ export default (state, action) => {
       return {
         ...state,
         loading: true
+      }
+    case LOAD_USER:
+      return {
+        ...state,
+        user: action.user
       }
     default:
       return state;

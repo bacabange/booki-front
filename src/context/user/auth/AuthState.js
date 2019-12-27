@@ -7,7 +7,8 @@ import {
   SET_LOADING,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  LOGOUT
+  LOGOUT,
+  LOAD_USER
 } from '../../types';
 
 const AuthState = props => {
@@ -20,6 +21,15 @@ const AuthState = props => {
   }
 
   const [state, dispatch] = useReducer(AuthReducer, initialState);
+
+  const loadUser = async () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    dispatch({
+      type: LOAD_USER,
+      user
+    });
+  }
 
   const login = async (formData) => {
     const config = {
@@ -60,7 +70,8 @@ const AuthState = props => {
       user: state.user,
       error: state.error,
       login,
-      logout
+      logout,
+      loadUser
      }}
   >
     {props.children}

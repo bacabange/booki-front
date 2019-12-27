@@ -1,8 +1,12 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, Suspense } from 'react';
 import logo from '../../assets/images/Logo.png';
 import AuthContext from '../../context/user/auth/authContext';
 import AlertContext from '../../context/layout/alert/alertContext';
 import Alert from '../../components/layout/Alert';
+import Loading from '../../components/layout/Loading';
+
+const DefaultHeader = React.lazy(() => import('../../containers/DefaultLayout/DefaultHeader'));
+
 
 const SignInPage = props => {
   const authContext = useContext(AuthContext);
@@ -30,7 +34,6 @@ const SignInPage = props => {
   const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
 
   const onSubmit = e => {
-    console.log("TCL: error", error)
     try {
       e.preventDefault();
       login({ email, password });
@@ -44,6 +47,10 @@ const SignInPage = props => {
 
   return (
     <div className="container">
+
+      <Suspense fallback={Loading()}>
+        <DefaultHeader />
+      </Suspense>
 
       <section className="section">
         <div className="container">
