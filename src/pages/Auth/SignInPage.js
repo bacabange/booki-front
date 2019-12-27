@@ -7,7 +7,6 @@ import Loading from '../../components/layout/Loading';
 
 const DefaultHeader = React.lazy(() => import('../../containers/DefaultLayout/DefaultHeader'));
 
-
 const SignInPage = props => {
   const authContext = useContext(AuthContext);
   const alertContext = useContext(AlertContext);
