@@ -19,7 +19,8 @@ const SignUpPage = props => {
   });
 
   const { setAlert } = alertContext;
-  const { login, error, isAuthenticated } = authContext;
+  const { register, error, isAuthenticated } = authContext;
+  const { email, password, first_name, last_name } = user;
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -37,13 +38,11 @@ const SignUpPage = props => {
   const onSubmit = e => {
     try {
       e.preventDefault();
-      login({ email, password });
+      register({ email, password, first_name, last_name });
     } catch (error) {
       alertContext.setAlert({ error, type: 'danger', title: 'Error' });
     }
   };
-
-  const { email, password, first_name } = user;
 
   return (
     <div className="container">

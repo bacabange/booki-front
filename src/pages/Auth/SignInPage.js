@@ -1,4 +1,6 @@
 import React, { useState, useContext, useEffect, Suspense } from 'react';
+import { useForm } from 'react-hook-form';
+
 import logo from '../../assets/images/Logo.png';
 import AuthContext from '../../context/user/auth/authContext';
 import AlertContext from '../../context/layout/alert/alertContext';
@@ -11,13 +13,17 @@ const SignInPage = props => {
   const authContext = useContext(AuthContext);
   const alertContext = useContext(AlertContext);
 
-  const [user, setUser] = useState({
-    email: 'admin@admin.com',
-    password: 'secret'
-  });
-
+  const { register, handleSubmit, watch, errors } = useForm()
+  console.log("TCL: errors", errors)
   const { setAlert } = alertContext;
   const { login, error, isAuthenticated } = authContext;
+
+  // console.log(watch('email'))
+
+  const [user, setUser] = useState({
+    email: '',
+    password: ''
+  });
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -32,7 +38,7 @@ const SignInPage = props => {
 
   const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
 
-  const onSubmit = e => {
+  const onSubmit = (data, e) => {
     try {
       e.preventDefault();
       login({ email, password });
@@ -66,40 +72,47 @@ const SignInPage = props => {
 
               <Alert />
 
-              <div className="field">
-                <label className="label">Email</label>
-                <div className="control">
-                  <input
-                    className="input"
-                    name="email"
-                    type="text"
-                    placeholder="example@booki.co"
-                    value={email}
-                    onChange={onChange} />
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="field">
+                  <label className="label">Email</label>
+                  <div className="control">
+                    <input
+                      className="input"
+                      ref={register({ required: true })}
+                      name="email"
+                      type="text"
+                      placeholder="example@booki.co"
+                      value={email}
+                      onChange={onChange} />
+                  </div>
+                  {/* <p className="help">This is a help text</p> */}
                 </div>
-                {/* <p className="help">This is a help text</p> */}
-              </div>
 
-              <div className="field">
-                <label className="label">Password</label>
-                <div className="control">
-                  <input
-                    className="input"
-                    type="password"
-                    name="password"
-                    placeholder="Don't write 123456"
-                    value={password}
-                    onChange={onChange} />
+                <div className="field">
+                  <label className="label">Password</label>
+                  <div className="control">
+                    <input
+                      className="input"
+                      ref={register({ required: true })}
+                      type="password"
+                      name="password"
+                      placeholder="Don't write 123456"
+                      value={password}
+                      onChange={onChange} />
+                  </div>
+                  {/* <p className="help">This is a help text</p> */}
                 </div>
-                {/* <p className="help">This is a help text</p> */}
-              </div>
 
-              <button
-                onClick={onSubmit}
-                className={`button is-primary ${authContext.loading ? "button is-loading" : ""}`}
-                disabled={authContext.loading}>
-                  Sign In
-              </button>
+                {errors.exampleRequired && <span>This field is required</span>}
+
+                <button
+                  type="submit"
+                  className={`button is-primary ${authContext.loading ? "button is-loading" : ""}`}
+                  disabled={authContext.loading}>
+                    Sign In
+                </button>
+              </form>
+
             </div>
           </div>
         </div>

@@ -21,7 +21,7 @@ const DefaultHeader = () => {
   return (
     <nav className="navbar" role="navigation" aria-label="main navigation">
       <div className="navbar-brand">
-        <a className="navbar-item" href="https://bulma.io">
+        <a className="navbar-item" href="/">
           <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28" alt="Logo" />
         </a>
 
@@ -34,12 +34,15 @@ const DefaultHeader = () => {
       </div>
 
       <div id="navbarBasicExample" className="navbar-menu">
-        <div className="navbar-start">
-          {/* eslint-disable-next-line */}
-          <a className="navbar-item">
-            Home
-          </a>
-        </div>
+        {
+          isAuthenticated &&
+            <div className="navbar-start">
+              {/* eslint-disable-next-line */}
+              <a className="navbar-item">
+                Home
+              </a>
+            </div>
+        }
 
         <div className="navbar-end">
           {

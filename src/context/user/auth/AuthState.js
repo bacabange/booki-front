@@ -8,7 +8,9 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  LOAD_USER
+  LOAD_USER,
+  REGISTER_FAIL,
+  REGISTER_SUCCESS
 } from '../../types';
 
 const AuthState = props => {
@@ -58,6 +60,34 @@ const AuthState = props => {
     }
   }
 
+  const register = async formData => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    };
+
+    try {
+      setLoading();
+      loadProgressBar();
+
+      const res = await axios.post(`http://localhost:8080/api/v1/auth/register`, formData, config);
+
+      dispatch({
+        type: REGISTER_SUCCESS,
+        payload: res.data.data
+      });
+
+      loadUser();
+    } catch (error) {
+      dispatch({
+        type: REGISTER_FAIL,
+        payload: error.response.data
+      });
+    }
+  };
+
   const logout = () => dispatch({ type: LOGOUT });
 
   const setLoading = () => dispatch({ type: SET_LOADING });
@@ -71,7 +101,8 @@ const AuthState = props => {
       error: state.error,
       login,
       logout,
-      loadUser
+      loadUser,
+      register
      }}
   >
     {props.children}
